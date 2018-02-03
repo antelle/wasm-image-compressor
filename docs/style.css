@@ -12,10 +12,7 @@ body {
     flex-direction: column;
     align-items: stretch;
     justify-content: center;
-    height: 100vh;
-}
-h1 {
-    margin-bottom: 20px;
+    min-height: 100vh;
 }
 .drag-error {
     margin-top: 10px;
@@ -26,6 +23,8 @@ h1 {
     border: 1px dashed #EAC9C0;
     border-radius: 10px;
     color: #EAC9C0;
+    padding: 20px;
+    margin: 20px 0;
     flex-grow: 1;
     display: flex;
     flex-direction: column;
@@ -37,12 +36,24 @@ h1 {
     -moz-user-select: none;
 }
 .drag-target.dragged {
-    border-width: 2px;
     border-style: solid;
+    background: #EAC9C0;
+    color: #FCFEF9;
 }
 .file-input {
     position: absolute;
     left: -100000px;
     top: -100000px;
     visibility: hidden;
+}
+.work {
+    display: none;
+    flex-direction: column;
+}
+.images img {
+    width: 50%;
+    float: left;
+}
+.log {
+    margin: 10px 0;
 }
