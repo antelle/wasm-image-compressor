@@ -18,6 +18,7 @@ Prerequisties:
 
 ```bash
 git clone --recursive git@github.com:antelle/wasm-image-compressor.git
+cd wasm-image-compressor
 ./build.sh
 ```
 
