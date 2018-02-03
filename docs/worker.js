@@ -32,7 +32,7 @@ function processImage(args) {
         } else {
             const compressedSize = Module.getValue(compressedSizePointer, 'i32', false);
             const percentage = (compressedSize / fileSize * 100).toFixed(1);
-            log(`Compressed: ${compressedSize} bytes (${percentage}%)`);
+            log(`Compressed: ${fileSize} -> ${compressedSize} bytes (${percentage}%)`);
             const compressed = new Uint8Array(compressedSize);
             compressed.set(Module.HEAPU8.subarray(buffer, buffer + compressedSize));
             self.postMessage({ type: 'result', result: compressed });
