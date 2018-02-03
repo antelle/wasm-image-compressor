@@ -119,8 +119,8 @@ function processImage(data, options) {
     document.querySelector('.link-download').style.display = 'none';
     const fileSize = data.byteLength;
     appendImageToImages(data, 'img-original').then(imageEl => {
-        const width = imageEl.width;
-        const height = imageEl.height;
+        const width = imageEl.origWidth;
+        const height = imageEl.origHeight;
         log(`Image decoded: ${width}x${height}`);
         const canvas = document.createElement('canvas');
         canvas.width = width;
@@ -206,14 +206,16 @@ function appendImageToImages(data, cls) {
         imageEl.src = imageUrl;
         imageEl.className = cls;
         imageEl.onload = e => {
-            URL.revokeObjectURL(imageUrl);
+            imageEl.origWidth = imageEl.width;
+            imageEl.origHeight = imageEl.height;
+            const imagesAreaEl = document.querySelector('.images');
+            imagesAreaEl.appendChild(imageEl);
             imageEl.style.display = 'block';
+            URL.revokeObjectURL(imageUrl);
             resolve(imageEl);
         };
         imageEl.onerror = e => {
             reject('Error loading image, maybe it\'s not in PNG format?');
         };
-        const imagesAreaEl = document.querySelector('.images');
-        imagesAreaEl.appendChild(imageEl);
     });
 }
