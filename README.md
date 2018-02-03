@@ -22,8 +22,6 @@ cd wasm-image-compressor
 ./build.sh
 ```
 
-Building tested only macOS.
-
 ## License
 
 [GPLv3](LICENSE)
