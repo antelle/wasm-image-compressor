@@ -42,16 +42,18 @@ file(GLOB imagequant_src
     "lib/imagequant/pam.c"
 )
 add_library(imagequant ${imagequant_src})
+add_dependencies(${PROJECT_NAME} imagequant)
 
 add_subdirectory(lib/zlib)
 add_dependencies(${PROJECT_NAME} zlibstatic)
 
 set(ZLIB_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/lib/zlib")
-set(ZLIB_LIBRARY "${CMAKE_SOURCE_DIR}/lib/zlib/dist/lib/libz.a")
+set(ZLIB_LIBRARY "${CMAKE_SOURCE_DIR}/lib/zlib/.tmp/lib/libz.a")
 set(M_LIBRARY "")
 
 add_subdirectory(lib/libpng)
 add_dependencies(${PROJECT_NAME} png_static)
+add_dependencies(png zlibstatic)
 
 target_link_libraries(${PROJECT_NAME}
     imagequant
