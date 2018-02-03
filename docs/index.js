@@ -50,9 +50,8 @@ function init() {
             break;
         }
     };
-    document.querySelector('.sel-colors').onchange = () => {
-        imageParamsChanged();
-    };
+    document.querySelector('.sel-colors').onchange = imageParamsChanged;
+    document.querySelector('.sel-dithering').onchange = imageParamsChanged;
     document.querySelector('.link-download').onclick = e => {
         e.preventDefault();
         downloadImage();
@@ -82,7 +81,8 @@ function logError(msg) {
 
 function getOptions() {
     return {
-        maxColors: document.querySelector('.sel-colors').value
+        maxColors: +document.querySelector('.sel-colors').value,
+        dithering: +document.querySelector('.sel-dithering').value,
     };
 }
 

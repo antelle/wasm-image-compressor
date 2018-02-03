@@ -25,8 +25,8 @@ function processImage(args) {
             return;
         }
         const compressedSizePointer = Module._malloc(4);
-        const { maxColors } = options;
-        const result = Module._compress(width, height, maxColors, buffer, compressedSizePointer);
+        const { maxColors, dithering } = options;
+        const result = Module._compress(width, height, maxColors, dithering, buffer, compressedSizePointer);
         if (result) {
             self.postMessage({ type: 'error', error: `Compression error: ${result}` });
         } else {

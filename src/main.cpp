@@ -23,6 +23,7 @@ extern "C" {
         int width,
         int height,
         int maxColors,
+        float dithering,
         void* data,
         int* output_size
     ) {
@@ -38,6 +39,12 @@ extern "C" {
         if (liq_image_quantize(image, attr, &res) != LIQ_OK) {
             fprintf(stderr, "Quantization failed\n");
             return 1;
+        }
+        if (dithering > 0) {
+            if (liq_set_dithering_level(res, dithering) != LIQ_OK) {
+                fprintf(stderr, "liq_set_dithering_level failed\n");
+                return 1;
+            }
         }
 
         liq_write_remapped_image(res, image, data, data_size);
