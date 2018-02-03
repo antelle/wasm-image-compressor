@@ -1,12 +1,16 @@
 [submodule "lib/lodepng"]
 	path = lib/lodepng
 	url = git@github.com:lvandeve/lodepng.git
+	ignore = dirty
 [submodule "lib/imagequant"]
 	path = lib/imagequant
 	url = git@github.com:ImageOptim/libimagequant.git
+	ignore = dirty
 [submodule "lib/libpng"]
 	path = lib/libpng
 	url = git@github.com:glennrp/libpng.git
+	ignore = dirty
 [submodule "lib/zlib"]
 	path = lib/zlib
 	url = git@github.com:madler/zlib.git
+	ignore = dirty
