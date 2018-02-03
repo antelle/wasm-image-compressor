@@ -15,6 +15,10 @@ body {
     justify-content: center;
     min-height: 100vh;
 }
+.wa-logo {
+    width: 32px;
+    float: right;
+}
 .drag-error {
     margin-top: 10px;
     display: none;
