@@ -8,7 +8,7 @@ body {
     font-family: -apple-system, "BlinkMacSystemFont", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
     background: #FCFEF9;
     color: #1B1C21;
-    padding: 20px;
+    padding: 10px;
     display: flex;
     flex-direction: column;
     align-items: stretch;
@@ -61,4 +61,10 @@ body {
 .link-download {
     float: right;
     display: none;
+}
+.footer, .footer a, .footer a:visited {
+    margin-top: 6px;
+    font-size: 10px;
+    text-align: right;
+    color: #EAC9C0;
 }
