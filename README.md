@@ -22,6 +22,12 @@ cd wasm-image-compressor
 ./build.sh
 ```
 
+## Why?
+
+Nothing special here, it's just a demo of using some libs like zlib and libpng in WebAssembly.
+
+There's no particular reason to create a tool like this, however feel free to use it if you like it. It's just a simple Web UI for libimagequant.
+
 ## License
 
 [GPLv3](LICENSE)
