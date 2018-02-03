@@ -10,13 +10,18 @@ worker.onmessage = e => {
             logError(e.data.msg);
             break;
         case 'result':
-            showResult(e.data.result, e.data.fileName);
+            showResult(e.data.result);
+            break;
+        case 'error':
+            showErrorResult(e.data.error);
             break;
     }
 };
 
+let currentTask = {};
+
 function init() {
-    const inputFile = document.querySelector('#input-file');
+    const inputFile = document.querySelector('.input-file');
     inputFile.onchange = e => {
         const file = e.target.files[0];
         processFile(file);
@@ -45,6 +50,13 @@ function init() {
             break;
         }
     };
+    document.querySelector('.sel-colors').onchange = () => {
+        imageParamsChanged();
+    };
+    document.querySelector('.link-download').onclick = e => {
+        e.preventDefault();
+        downloadImage();
+    };
 }
 
 let logEl;
@@ -68,8 +80,15 @@ function logError(msg) {
     log('ERROR ' + msg);
 }
 
+function getOptions() {
+    return {
+        maxColors: document.querySelector('.sel-colors').value
+    };
+}
+
 function processFile(file) {
     initLog();
+    currentTask = { fileName: file.name };
     const dragError = document.querySelector('.drag-error');
     if (file.type != 'image/png') {
         dragError.innerHTML = 'We support only PNG files.';
@@ -83,7 +102,7 @@ function processFile(file) {
         const fileName = file.name;
         const fileSize = result.byteLength;
         log(`File data loaded: ${fileName}, ${fileSize} bytes`);
-        processImage(result, file.name);
+        processImage(result, getOptions());
     };
     reader.onerror = () => {
         dragError.innerHTML = 'Cannot load image.';
@@ -92,11 +111,12 @@ function processFile(file) {
     reader.readAsArrayBuffer(file);
 }
 
-function processImage(data, fileName) {
+function processImage(data, options) {
     const imagesAreaEl = document.querySelector('.images');
     imagesAreaEl.innerHTML = '';
     const workAreaEl = document.querySelector('.work');
     workAreaEl.style.display = 'flex';
+    document.querySelector('.link-download').style.display = 'none';
     const fileSize = data.byteLength;
     appendImageToImages(data, 'img-original').then(imageEl => {
         const width = imageEl.width;
@@ -109,19 +129,64 @@ function processImage(data, fileName) {
         context.drawImage(imageEl, 0, 0);
         const rgbData = context.getImageData(0, 0, width, height).data;
         log(`Converted to RGB data: ${rgbData.byteLength} bytes`);
-        worker.postMessage({ type: 'image', rgbData, width, height, fileSize, fileName });
+        currentTask.width = width;
+        currentTask.height = height;
+        currentTask.rgbData = rgbData;
+        currentTask.fileSize = fileSize;
+        currentTask.options = options;
+        postImageTask();
     }).catch(e => {
         logError(e);
     });
 }
 
-function showResult(result, fileName) {
+function postImageTask() {
+    currentTask.inProgress = true;
+    worker.postMessage({
+        type: 'image',
+        rgbData: currentTask.rgbData,
+        width: currentTask.width,
+        height: currentTask.height,
+        fileSize: currentTask.fileSize,
+        options: currentTask.options
+    });
+}
+
+function imageParamsChanged() {
+    if (!currentTask.rgbData || currentTask.inProgress) {
+        return;
+    }
+    const imgResult = document.querySelector('.img-result');
+    if (imgResult) {
+        imgResult.parentNode.removeChild(imgResult);
+    }
+    currentTask.options = getOptions();
+    initLog();
+    postImageTask();
+}
+
+function showResult(result) {
     appendImageToImages(result, 'img-result');
-    const compressedBlob = new Blob([result], { type: 'image/png' });
+    currentTask.inProgress = false;
+    currentTask.result = result;
+    if (document.querySelector('.check-auto-download').checked) {
+        downloadImage();
+    } else {
+        document.querySelector('.link-download').style.display = 'inline-block';
+    }
+}
+
+function showErrorResult(error) {
+    logError(error);
+    currentTask.inProgress = false;
+}
+
+function downloadImage() {
+    const compressedBlob = new Blob([currentTask.result], { type: 'image/png' });
     const url = URL.createObjectURL(compressedBlob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = fileName.replace('.png', '.min.png');
+    link.download = currentTask.fileName.replace('.png', '.min.png');
     link.style = 'display: none';
     document.body.appendChild(link);
     link.click();
@@ -131,7 +196,7 @@ function showResult(result, fileName) {
     }, 1000);
 }
 
-function appendImageToImages(data) {
+function appendImageToImages(data, cls) {
     return new Promise((resolve, reject) => {
         const dataView = new Uint8Array(data);
         const blob = new Blob([dataView], { type: 'image/png' });
@@ -139,6 +204,7 @@ function appendImageToImages(data) {
         const imageEl = document.createElement('img');
         imageEl.style.display = 'none';
         imageEl.src = imageUrl;
+        imageEl.className = cls;
         imageEl.onload = e => {
             URL.revokeObjectURL(imageUrl);
             imageEl.style.display = 'block';

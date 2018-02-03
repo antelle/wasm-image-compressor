@@ -1,7 +1,8 @@
 * {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    /* https://color.adobe.com/Ive-got-friends-in-MERLOT-places-color-theme-10428977/?showPublished=true */
 }
 body {
     font-family: -apple-system, "BlinkMacSystemFont", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
@@ -40,7 +41,7 @@ body {
     background: #EAC9C0;
     color: #FCFEF9;
 }
-.file-input {
+.input-file {
     position: absolute;
     left: -100000px;
     top: -100000px;
@@ -56,4 +57,8 @@ body {
 }
 .log {
     margin: 10px 0;
+}
+.link-download {
+    float: right;
+    display: none;
 }

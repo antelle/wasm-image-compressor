@@ -11,12 +11,29 @@
         <p>Drag your PNG image or click here to open.</p>
         <p class="drag-error error"></p>
     </div>
-    <div class="work">
-        <pre class="log">
-        </pre>
-        <div class="images">
-        </div>
+    <div class="config">
+        <select class="sel-colors">
+            <option value="2">2 colors</option>
+            <option value="2">4 colors</option>
+            <option value="8">8 colors</option>
+            <option value="16">16 colors</option>
+            <option value="32">32 colors</option>
+            <option value="64">64 colors</option>
+            <option value="96">96 colors</option>
+            <option value="128" selected>128 colors</option>
+            <option value="192">192 colors</option>
+            <option value="256">256 colors</option>
+        </select>
+        &nbsp;
+        <label>
+            <input type="checkbox" checked class="check-auto-download" /> auto-download
+        </label>
+        <a href="#" class="link-download">download</a>
     </div>
-    <input type="file" id="input-file" class="file-input" accept="image/png" />
+    <div class="work">
+        <pre class="log"></pre>
+        <div class="images"></div>
+    </div>
+    <input type="file" class="input-file" accept="image/png" />
 </body>
 </html>

@@ -22,6 +22,7 @@ extern "C" {
     int compress(
         int width,
         int height,
+        int maxColors,
         void* data,
         int* output_size
     ) {
@@ -30,7 +31,7 @@ extern "C" {
         liq_attr *attr = liq_attr_create();
         liq_image *image = liq_image_create_rgba(attr, data, width, height, 0);
         liq_result *res;
-        if (liq_set_max_colors(attr, 128) != LIQ_OK) {
+        if (liq_set_max_colors(attr, maxColors) != LIQ_OK) {
             fprintf(stderr, "liq_set_max_colors failed\n");
             return 1;
         }
