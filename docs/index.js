@@ -1,9 +1,60 @@
 window.Module = {
-    postRun,
     wasmBinaryFile: "dist/image_compressor.wasm",
+    postRun() {
+        init();
+    }
 };
 
-function postRun() {
+function init() {
+    const inputFile = document.querySelector('#input-file');
+    inputFile.onchange = e => {
+        const file = e.target.files[0];
+        processFile(file);
+    };
+
+    const dragTarget = document.querySelector('.drag-target');
+    const dragError = document.querySelector('.drag-error');
+    dragTarget.onclick = () => {
+        inputFile.value = '';
+        inputFile.click();
+    };
+    dragTarget.ondragover = e => {
+        e.preventDefault();
+        dragTarget.classList.add('dragged');
+        dragError.style.display = 'none';
+    };
+    dragTarget.ondragleave = e => {
+        e.preventDefault();
+        dragTarget.classList.remove('dragged');
+    };
+    dragTarget.ondrop = e => {
+        e.preventDefault();
+        dragTarget.classList.remove('dragged');
+        for (const file of e.dataTransfer.files) {
+            processFile(file);
+            break;
+        }
+    };
+}
+
+function processFile(file) {
+    const dragError = document.querySelector('.drag-error');
+    if (file.type != 'image/png') {
+        dragError.innerHTML = 'We support only PNG files.';
+        dragError.style.display = 'block';
+        return;
+    }
+    console.log('Loading image');
+    const reader = new FileReader();
+    reader.onload = e => {
+        const result = e.target.result;
+        processImage(result, file.name);
+    };
+    reader.onerror = () => {
+        dragError.innerHTML = 'Cannot load image.';
+        dragError.style.display = 'block';
+    };
+    reader.readAsArrayBuffer(file);
 }
 
 function processImage(data, fileName) {
@@ -59,17 +110,3 @@ function processImage(data, fileName) {
     imageEl.style.display = 'none';
     imageEl.src = imageUrl;
 }
-
-document.getElementById('file').onchange = e => {
-    console.log('Loading image');
-    const file = e.target.files[0];
-    const reader = new FileReader();
-    reader.onload = e => {
-        const result = e.target.result;
-        processImage(result, file.name);
-    };
-    reader.onerror = () => {
-        alert('Cannot read image');
-    };
-    reader.readAsArrayBuffer(file);
-};

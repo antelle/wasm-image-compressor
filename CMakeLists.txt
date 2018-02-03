@@ -21,7 +21,6 @@ set(CMAKE_EXE_LINKER_FLAGS "-O3 -g0 --memory-init-file 0 \
 -s EXTRA_EXPORTED_RUNTIME_METHODS='[\"ccall\", \"cwrap\"]'")
 
 include_directories(lib/imagequant)
-include_directories(lib/lodepng)
 include_directories(lib/libpng)
 include_directories(lib/zlib)
 include_directories($ENV{EMSCRIPTEN}/system/include)
@@ -44,21 +43,6 @@ file(GLOB imagequant_src
 )
 add_library(imagequant ${imagequant_src})
 
-file(GLOB lodepng_src
-    "lib/lodepng/lodepng_util.cpp"
-    "lib/lodepng/lodepng.cpp"
-    "lib/lodepng/pngdetail.cpp"
-)
-add_library(lodepng ${lodepng_src})
-
-# add_custom_target(libpng_conf_h ALL
-#     ${CMAKE_COMMAND} -E create_symlink "${CMAKE_SOURCE_DIR}/src/conf/pnglibconf.h" "${CMAKE_SOURCE_DIR}/lib/libpng/pnglibconf.h")
-# file(GLOB libpng_src
-#     "lib/libpng/*.c"
-# )
-# add_library(libpng ${libpng_src})
-# add_dependencies(libpng libpng_conf_h)
-
 add_subdirectory(lib/zlib)
 add_dependencies(${PROJECT_NAME} zlibstatic)
 
@@ -71,7 +55,6 @@ add_dependencies(${PROJECT_NAME} png_static)
 
 target_link_libraries(${PROJECT_NAME}
     imagequant
-    lodepng
     zlibstatic
     png
 )

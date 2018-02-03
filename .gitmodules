@@ -1,7 +1,3 @@
-[submodule "lib/lodepng"]
-	path = lib/lodepng
-	url = git@github.com:lvandeve/lodepng.git
-	ignore = dirty
 [submodule "lib/imagequant"]
 	path = lib/imagequant
 	url = git@github.com:ImageOptim/libimagequant.git

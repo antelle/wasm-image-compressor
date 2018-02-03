@@ -1,7 +1,6 @@
 #include <iostream>
 #include <emscripten.h>
 #include <libimagequant.h>
-#include <lodepng.h>
 #include <png.h>
 
 struct WriteState {
@@ -42,38 +41,6 @@ extern "C" {
 
         liq_write_remapped_image(res, image, data, data_size);
         const liq_palette *pal = liq_get_palette(res);
-
-        // LodePNGState state;
-        // lodepng_state_init(&state);
-        // state.info_raw.colortype = LCT_PALETTE;
-        // state.info_raw.bitdepth = 8;
-        // state.info_png.color.colortype = LCT_PALETTE;
-        // state.info_png.color.bitdepth = 8;
-        // state.encoder.add_id = false;
-        // state.encoder.text_compression = 1;
-        // state.encoder.filter_strategy = LFS_ENTROPY;
-        // state.encoder.zlibsettings.nicematch = 258;
-        // state.encoder.zlibsettings.lazymatching = 1;
-        // state.encoder.zlibsettings.windowsize = 32768;
-        // state.encoder.zlibsettings.minmatch = 3;
-        //
-        // for (int i = 0; i < pal->count; i++) {
-        //     lodepng_palette_add(&state.info_png.color, pal->entries[i].r, pal->entries[i].g, pal->entries[i].b, pal->entries[i].a);
-        //     lodepng_palette_add(&state.info_raw, pal->entries[i].r, pal->entries[i].g, pal->entries[i].b, pal->entries[i].a);
-        // }
-        //
-        // unsigned char* output_file_data = NULL;
-        // size_t output_file_size = 0;
-        //
-        // unsigned int out_status = lodepng_encode(&output_file_data, &output_file_size,
-        //     (unsigned char*)data, width, height, &state);
-        // if (out_status) {
-        //     fprintf(stderr, "Can't encode image: %s\n", lodepng_error_text(out_status));
-        //     return 2;
-        // }
-        // memcpy(data, output_file_data, output_file_size);
-        // free(output_file_data);
-        // *output_size = output_file_size;
 
         png_structp png = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
         if (!png) {
